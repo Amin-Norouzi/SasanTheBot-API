@@ -18,6 +18,7 @@
     <description>SasanTheBot-API</description>
     <modules>
         <module>user-service</module>
+        <module>movie-service</module>
     </modules>
     <packaging>pom</packaging>
 
