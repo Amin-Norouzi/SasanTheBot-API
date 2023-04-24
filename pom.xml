@@ -20,6 +20,7 @@
         <module>user-service</module>
         <module>movie-service</module>
         <module>discovery-server</module>
+        <module>api-gateway</module>
     </modules>
     <packaging>pom</packaging>
 
