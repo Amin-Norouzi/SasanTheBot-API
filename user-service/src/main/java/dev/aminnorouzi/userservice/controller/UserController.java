@@ -52,4 +52,10 @@ public class UserController {
         User user = userService.change(id, status);
         return userMapper.mapFromUser(user);
     }
+
+    @GetMapping("/{id}/verify")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void verifyUser(@PathVariable Long id) {
+        userService.verify(id);
+    }
 }

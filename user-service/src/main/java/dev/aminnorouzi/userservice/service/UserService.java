@@ -99,4 +99,10 @@ public class UserService {
         return saved;
     }
 
+    public void verify(Long id) {
+        boolean exists = userRepository.existsById(id);
+        if (!exists) {
+            throw new UserNotFoundException("User: %s was not found!".formatted(id));
+        }
+    }
 }
