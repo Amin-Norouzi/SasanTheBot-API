@@ -12,13 +12,13 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/searches")
+//@RequestMapping("/api/v1/searches")
 public class SearchController {
 
     private final SearchService searchService;
 
-    @GetMapping
-    public List<Search> searchMovies(@RequestParam String query) {
-        return searchService.search(query);
-    }
+//    @GetMapping
+//    public List<Search> searchMovies(@RequestParam String query) {
+//        return searchService.search(query);
+//    }
 }
