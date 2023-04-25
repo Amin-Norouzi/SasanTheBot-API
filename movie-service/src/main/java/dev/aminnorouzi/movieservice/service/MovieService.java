@@ -1,9 +1,12 @@
 package dev.aminnorouzi.movieservice.service;
 
 import dev.aminnorouzi.movieservice.client.MovieClient;
+import dev.aminnorouzi.movieservice.client.UserClient;
 import dev.aminnorouzi.movieservice.dto.MovieRequest;
 import dev.aminnorouzi.movieservice.exception.MovieNotFoundException;
+import dev.aminnorouzi.movieservice.model.MetaData;
 import dev.aminnorouzi.movieservice.model.Movie;
+import dev.aminnorouzi.movieservice.model.Search;
 import dev.aminnorouzi.movieservice.model.Type;
 import dev.aminnorouzi.movieservice.repository.MovieRepository;
 import dev.aminnorouzi.movieservice.util.StringUtil;
@@ -15,6 +18,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -25,6 +30,9 @@ public class MovieService {
     private final MovieRepository movieRepository;
     private final MovieClient movieClient;
     private final StringUtil stringUtil;
+    private final MetaDataService metaDataService;
+    private final UserClient userClient;
+    private final SearchService searchService;
 
     public Movie save(MovieRequest request) {
         String generatedImdbUrl = stringUtil.generateImdbUrl(request.getImdbId());
@@ -65,7 +73,7 @@ public class MovieService {
             movie = save(request);
         }
 
-        log.info("Found new movie: {}", movie);
+        log.info("Found a movie: {}", movie);
         return movie;
     }
 
@@ -86,10 +94,41 @@ public class MovieService {
         return found;
     }
 
+    public List<Movie> getAllByUserId(Long userId) {
+        List<Movie> found = new ArrayList<>();
+
+        List<MetaData> metaDataList = metaDataService.getAllByUserId(userId);
+        metaDataList.forEach(metaData -> {
+            Movie movie = getById(metaData.getMovieId());
+            movie.setMetaData(metaData);
+
+            found.add(movie);
+        });
+
+        log.info("Found all user movies: userId={}, {}", userId, found);
+        return found;
+    }
+
     public void delete(Long id) {
         Movie movie = getById(id);
         movieRepository.delete(movie);
 
         log.info("Deleted a movie: {}", movie);
+    }
+
+    public Movie addToUser(Long movieId, Long userId) {
+        userClient.verify(userId);
+
+        MetaData metaData = metaDataService.create(movieId, userId);
+
+        Movie movie = getById(movieId);
+        movie.setMetaData(metaData);
+
+        log.info("Added a movie to user: movieId={}, userId={}, {}", movieId, userId, movie);
+        return movie;
+    }
+
+    public List<Search> search(String query) {
+        return searchService.search(query);
     }
 }

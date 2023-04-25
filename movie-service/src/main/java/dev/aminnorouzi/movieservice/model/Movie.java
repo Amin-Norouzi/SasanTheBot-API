@@ -46,6 +46,7 @@ public class Movie {
 
     @NotNull
     @NotBlank
+    @ToString.Exclude
     @Column(length = 2055)
     private String overview;
 
@@ -87,6 +88,9 @@ public class Movie {
 
     @NotNull
     private LocalDate released;
+
+    @Transient
+    private MetaData metaData;
 
     @CreatedDate
     @Column(updatable = false)

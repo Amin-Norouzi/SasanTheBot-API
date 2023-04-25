@@ -4,9 +4,9 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-@FeignClient(value = "UserClient", url = "${movie.client.api-url}")
+@FeignClient(value = "UserClient", url = "http://localhost:8763/api/v1/users")
 public interface UserClient {
 
-    @GetMapping("{userId}/verify")
-    void verify(@PathVariable Long userId);
+    @GetMapping("/{id}/verify")
+    void verify(@PathVariable Long id);
 }

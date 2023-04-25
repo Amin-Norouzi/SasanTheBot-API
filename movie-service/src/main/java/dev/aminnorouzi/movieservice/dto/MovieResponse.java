@@ -1,5 +1,6 @@
 package dev.aminnorouzi.movieservice.dto;
 
+import dev.aminnorouzi.movieservice.model.MetaData;
 import dev.aminnorouzi.movieservice.model.Type;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -28,8 +29,7 @@ public class MovieResponse {
     private Integer episodes;
     private Integer seasons;
     private LocalDate released;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    private MetaData metaData;
 
     @Data
     @NoArgsConstructor
