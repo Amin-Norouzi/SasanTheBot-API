@@ -1,12 +1,16 @@
 package dev.aminnorouzi.movieservice.controller;
 
+import dev.aminnorouzi.movieservice.dto.MetadataRequest;
+import dev.aminnorouzi.movieservice.dto.MetadataResponse;
+import dev.aminnorouzi.movieservice.dto.MovieRequest;
 import dev.aminnorouzi.movieservice.dto.MovieResponse;
+import dev.aminnorouzi.movieservice.mapper.MetadataMapper;
 import dev.aminnorouzi.movieservice.mapper.MovieMapper;
+import dev.aminnorouzi.movieservice.model.Metadata;
 import dev.aminnorouzi.movieservice.model.Movie;
-import dev.aminnorouzi.movieservice.model.Search;
+import dev.aminnorouzi.movieservice.service.MetadataService;
 import dev.aminnorouzi.movieservice.service.MovieService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +23,10 @@ public class MovieController {
 
     private final MovieService movieService;
     private final MovieMapper movieMapper;
+    private final MetadataService metadataService;
+    private final MetadataMapper metadataMapper;
+
+    // MOVIE ENDPOINTs
 
     @GetMapping("/{id}")
     public MovieResponse getMovie(@PathVariable Long id) {
@@ -26,23 +34,17 @@ public class MovieController {
         return movieMapper.mapFromMovie(movie);
     }
 
-    @PostMapping("/{type}/{id}")
-    public MovieResponse getMovieByTmdbId(@PathVariable String type, @PathVariable Long id) {
-        Movie movie = movieService.getByTmdbId(id, type);
+    @PostMapping("/{tmdbId}")
+    public MovieResponse getMovieByTmdbId(@PathVariable Long tmdbId, @RequestParam String type) {
+        Movie movie = movieService.getByTmdbId(tmdbId, type);
         return movieMapper.mapFromMovie(movie);
     }
 
     @GetMapping
-    public MovieResponse.Pageable getAllMovies(@RequestParam(defaultValue = "0") Integer page,
-                                               @RequestParam(defaultValue = "5") Integer size,
-                                               @RequestParam(defaultValue = "id") String sort) {
-        Page<Movie> movies = movieService.getAll(page, size, sort);
-        return movieMapper.mapFromMovie(movies);
-    }
-
-    @GetMapping("/user/{id}")
-    public List<MovieResponse> getAllMoviesByUserId(@PathVariable Long id) {
-        return movieService.getAllByUserId(id)
+    public List<MovieResponse> getAllMovies(@RequestParam(defaultValue = "0") Integer page,
+                                            @RequestParam(defaultValue = "5") Integer size,
+                                            @RequestParam(defaultValue = "id") String sort) {
+        return movieService.getAll(page, size, sort)
                 .stream()
                 .map(movieMapper::mapFromMovie)
                 .toList();
@@ -54,14 +56,81 @@ public class MovieController {
         movieService.delete(id);
     }
 
-    @PostMapping("/{movieId}/user/{userId}")
-    public MovieResponse addMovieToUser(@PathVariable Long movieId, @PathVariable Long userId) {
-        Movie movie = movieService.addToUser(movieId, userId);
-        return movieMapper.mapFromMovie(movie);
+    // TODO
+    @PutMapping("/{id}")
+    public MovieResponse updateMovie(@PathVariable Long id, @RequestBody MovieRequest request) {
+//        movieService.update(id, request);
+        return null;
     }
 
-    @GetMapping("/search")
-    public List<Search> searchMovies(@RequestParam String query) {
+    // TODO
+    @GetMapping("/search/{query}")
+    public List<MovieRequest> searchMovies(@PathVariable String query) {
         return movieService.search(query);
     }
+
+    // METADATA ENDPOINTs - TODO: update endpoints to use metadata id instead of movieId and userId
+
+    @GetMapping("/users/{userId}")
+    public List<MovieResponse> getAllMoviesByUserId(@PathVariable Long userId) {
+        return movieService.getAllByUserId(userId)
+                .stream()
+                .map(movieMapper::mapFromMovie)
+                .toList();
+    }
+
+    @GetMapping("/{movieId}/users/{userId}")
+    public MetadataResponse getMetadata(@PathVariable Long movieId, @PathVariable Long userId) {
+        Metadata metadata = metadataService.getByMovieIdAndUserId(movieId, userId);
+        return metadataMapper.mapFromMetadata(metadata);
+    }
+
+    @PostMapping("/users")
+    @ResponseStatus(HttpStatus.CREATED)
+    public MetadataResponse addMetadata(@RequestBody MetadataRequest request) {
+        Metadata metadata = metadataService.add(request);
+        return metadataMapper.mapFromMetadata(metadata);
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/{movieId}/users/{userId}")
+    public void deleteMetadata(@PathVariable Long movieId, @PathVariable Long userId) {
+        metadataService.delete(movieId, userId);
+    }
+
+    @PutMapping("/{movieId}/users/{userId}")
+    public MetadataResponse watchOrUnwatchMetadata(@PathVariable Long movieId, @PathVariable Long userId,
+                                                   @RequestParam Boolean watch) {
+        Metadata metadata;
+        if (watch) {
+            metadata = metadataService.watch(movieId, userId);
+        } else {
+            metadata = metadataService.unwatch(movieId, userId);
+        }
+
+        return metadataMapper.mapFromMetadata(metadata);
+    }
+
+    /* MOVIES
+     * - get all movies /movies (has default pagination) GET
+     * - get a movie /movies/({movieId}/{tmdbId})?type={type} (not always required) POST/GET
+     * - delete a movie /movies/{movieId} DELETE
+     * - update a movie /movies/{movieId} [MovieRequest] POST
+     * - search a query /movies/{query} GET
+     */
+    /* METADATA
+     * - get all user movies /movies/users/{userId} GET
+     * - delete a user movie /movies/{movieId}/users/{userId} DELETE
+     * - watch a user movie /movies/{movieId}/users/{userId}?watch=true POST
+     * - unwatch a user movie /movies/{movieId}/users/{userId}?watch=true POST
+     * - add a user movie /movies/users [UserMovieRequest] POST
+     */
+    /* USERS
+        - get all user movies /users/{userId}/movies GET
+        - get a user movie /users/{userId}/movies/{movieId} GET
+        - delete a user movie /users/{userId}/movies/{movieId} DELETE
+        - watch a user movie /users/{userId}/movies/{movieId}?watch=true POST
+        - unwatch a user movie /users/{userId}/movies/{movieId}?watch=false POST
+        - add a user movie /users/movies POST [UserMovieRequest] POST
+     */
 }

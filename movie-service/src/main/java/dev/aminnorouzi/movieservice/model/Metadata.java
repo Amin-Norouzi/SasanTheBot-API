@@ -7,7 +7,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.PastOrPresent;
 import java.time.LocalDateTime;
 
 @Entity
@@ -19,7 +18,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Table(name = "metadata")
 @EntityListeners(AuditingEntityListener.class)
-public class MetaData {
+public class Metadata {
 
     @Id
     @Column(name = "id", nullable = false)
@@ -32,7 +31,6 @@ public class MetaData {
     @NotNull
     private Long userId;
 
-    @PastOrPresent
     private LocalDateTime watchedAt;
 
     @CreatedDate
@@ -40,5 +38,6 @@ public class MetaData {
     private LocalDateTime createdAt;
 
     @LastModifiedDate
+    @Column(insertable = false)
     private LocalDateTime updatedAt;
 }

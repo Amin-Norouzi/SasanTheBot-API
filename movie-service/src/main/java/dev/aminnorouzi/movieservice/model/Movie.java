@@ -90,12 +90,13 @@ public class Movie {
     private LocalDate released;
 
     @Transient
-    private MetaData metaData;
+    private Metadata metadata;
 
     @CreatedDate
     @Column(updatable = false)
     private LocalDateTime createdAt;
 
     @LastModifiedDate
+    @Column(insertable = false)
     private LocalDateTime updatedAt;
 }

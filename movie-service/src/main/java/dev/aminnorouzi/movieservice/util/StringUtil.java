@@ -1,6 +1,6 @@
 package dev.aminnorouzi.movieservice.util;
 
-import dev.aminnorouzi.movieservice.exception.ImdbIdConversionException;
+import dev.aminnorouzi.movieservice.exception.ImdbConversionException;
 import org.apache.commons.validator.routines.UrlValidator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -44,6 +44,6 @@ public class StringUtil {
             return matcher.group();
         }
 
-        throw new ImdbIdConversionException("Failed to extract imdb id!");
+        throw new ImdbConversionException("Failed to extract imdb id!");
     }
 }

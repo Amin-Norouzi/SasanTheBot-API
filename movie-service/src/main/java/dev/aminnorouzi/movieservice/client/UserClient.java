@@ -8,5 +8,5 @@ import org.springframework.web.bind.annotation.PathVariable;
 public interface UserClient {
 
     @GetMapping("/{id}/verify")
-    void verify(@PathVariable Long id);
+    boolean verify(@PathVariable Long id);
 }
