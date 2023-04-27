@@ -1,13 +1,14 @@
 package dev.aminnorouzi.movieservice.service;
 
 import dev.aminnorouzi.movieservice.client.MovieClient;
-import dev.aminnorouzi.movieservice.client.UserClient;
 import dev.aminnorouzi.movieservice.dto.MovieRequest;
+import dev.aminnorouzi.movieservice.dto.TmdbMovie;
 import dev.aminnorouzi.movieservice.exception.MovieNotFoundException;
 import dev.aminnorouzi.movieservice.model.Metadata;
 import dev.aminnorouzi.movieservice.model.Movie;
 import dev.aminnorouzi.movieservice.model.Type;
 import dev.aminnorouzi.movieservice.repository.MovieRepository;
+import dev.aminnorouzi.movieservice.util.BeanUtil;
 import dev.aminnorouzi.movieservice.util.StringUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +17,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,10 +32,10 @@ public class MovieService {
     private final MovieClient movieClient;
     private final StringUtil stringUtil;
     private final MetadataService metaDataService;
-    private final UserClient userClient;
     private final SearchService searchService;
+    private final BeanUtil beanUtil;
 
-    public Movie save(MovieRequest request) {
+    public Movie save(TmdbMovie request) {
         String generatedImdbUrl = stringUtil.generateImdbUrl(request.getImdbId());
 
         Movie movie = Movie.builder()
@@ -66,7 +68,7 @@ public class MovieService {
         if (optional.isPresent()) {
             movie = optional.get();
         } else {
-            MovieRequest request = movieClient.get(tmdbId, type);
+            TmdbMovie request = movieClient.get(tmdbId, type);
             request.setType(type);
 
             movie = save(request);
@@ -108,6 +110,21 @@ public class MovieService {
         return found;
     }
 
+    @Transactional
+    public Movie update(Long id, MovieRequest request) {
+        Movie movie = getById(id);
+
+        if (!beanUtil.hasDifference(movie, request)) {
+            throw new IllegalArgumentException("No difference found between request and movie!");
+        }
+
+        beanUtil.copy(request, movie);
+        Movie updated = movieRepository.save(movie);
+
+        log.info("Updated a movie: {}", updated);
+        return updated;
+    }
+
     public void delete(Long id) {
         Movie movie = getById(id);
         movieRepository.delete(movie);
@@ -115,7 +132,7 @@ public class MovieService {
         log.info("Deleted a movie: {}", movie);
     }
 
-    public List<MovieRequest> search(String query) {
+    public List<TmdbMovie> search(String query) {
         return searchService.search(query);
     }
 }

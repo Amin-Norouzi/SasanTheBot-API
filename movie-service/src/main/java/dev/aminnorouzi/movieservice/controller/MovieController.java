@@ -1,9 +1,6 @@
 package dev.aminnorouzi.movieservice.controller;
 
-import dev.aminnorouzi.movieservice.dto.MetadataRequest;
-import dev.aminnorouzi.movieservice.dto.MetadataResponse;
-import dev.aminnorouzi.movieservice.dto.MovieRequest;
-import dev.aminnorouzi.movieservice.dto.MovieResponse;
+import dev.aminnorouzi.movieservice.dto.*;
 import dev.aminnorouzi.movieservice.mapper.MetadataMapper;
 import dev.aminnorouzi.movieservice.mapper.MovieMapper;
 import dev.aminnorouzi.movieservice.model.Metadata;
@@ -50,6 +47,12 @@ public class MovieController {
                 .toList();
     }
 
+    @PutMapping("/{id}")
+    public MovieResponse updateMovie(@PathVariable Long id, @RequestBody MovieRequest request) {
+        Movie movie = movieService.update(id, request);
+        return movieMapper.mapFromMovie(movie);
+    }
+
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteMovie(@PathVariable Long id) {
@@ -57,15 +60,8 @@ public class MovieController {
     }
 
     // TODO
-    @PutMapping("/{id}")
-    public MovieResponse updateMovie(@PathVariable Long id, @RequestBody MovieRequest request) {
-//        movieService.update(id, request);
-        return null;
-    }
-
-    // TODO
     @GetMapping("/search/{query}")
-    public List<MovieRequest> searchMovies(@PathVariable String query) {
+    public List<TmdbMovie> searchMovies(@PathVariable String query) {
         return movieService.search(query);
     }
 
