@@ -65,7 +65,7 @@ public class MovieController {
         return movieService.search(query);
     }
 
-    @GetMapping("/{movieId}/verify}")
+    @GetMapping("/{movieId}/verify")
     public boolean verifyMovie(@PathVariable Long movieId) {
         return movieService.verify(movieId);
     }
