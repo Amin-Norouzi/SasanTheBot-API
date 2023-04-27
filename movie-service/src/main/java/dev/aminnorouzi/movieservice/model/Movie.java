@@ -13,6 +13,7 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.PositiveOrZero;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Setter
@@ -21,7 +22,7 @@ import java.time.LocalDateTime;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "movies")
+@Table(name = "movie")
 @EntityListeners(AuditingEntityListener.class)
 public class Movie {
 
@@ -88,6 +89,9 @@ public class Movie {
 
     @NotNull
     private LocalDate released;
+
+    @ManyToMany(fetch = FetchType.EAGER, targetEntity = Genre.class)
+    private List<Genre> genres;
 
     @Transient
     private Metadata metadata;

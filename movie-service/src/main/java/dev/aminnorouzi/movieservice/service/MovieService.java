@@ -51,7 +51,7 @@ public class MovieService {
                 .rating(request.getRating())
                 .episodes(request.getEpisodes())
                 .seasons(request.getSeasons())
-//                .genres()
+                .genres(request.getGenres())
                 .released(request.getReleased())
                 .build();
 

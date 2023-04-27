@@ -1,14 +1,13 @@
 package dev.aminnorouzi.movieservice.model;
 
 import lombok.*;
-import org.hibernate.annotations.Immutable;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
 
-@Immutable
+//@Immutable
 @Setter
 @Getter
 @Entity
