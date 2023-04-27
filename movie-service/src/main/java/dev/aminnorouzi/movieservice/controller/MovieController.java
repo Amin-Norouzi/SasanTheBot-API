@@ -65,6 +65,11 @@ public class MovieController {
         return movieService.search(query);
     }
 
+    @GetMapping("/{movieId}/verify}")
+    public boolean verifyMovie(@PathVariable Long movieId) {
+        return movieService.verify(movieId);
+    }
+
     // METADATA ENDPOINTs - TODO: update endpoints to use metadata id instead of movieId and userId
 
     @GetMapping("/users/{userId}")
@@ -113,6 +118,7 @@ public class MovieController {
      * - delete a movie /movies/{movieId} DELETE
      * - update a movie /movies/{movieId} [MovieRequest] POST
      * - search a query /movies/{query} GET
+     * - verify a movie /movies/{movieId}/verify GET
      */
     /* METADATA
      * - get all user movies /movies/users/{userId} GET

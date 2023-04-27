@@ -132,6 +132,10 @@ public class MovieService {
         log.info("Deleted a movie: {}", movie);
     }
 
+    public boolean verify(Long id) {
+        return movieRepository.existsById(id);
+    }
+
     public List<TmdbMovie> search(String query) {
         return searchService.search(query);
     }
