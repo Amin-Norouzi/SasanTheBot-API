@@ -23,6 +23,7 @@
         <module>api-gateway</module>
         <module>config-server</module>
         <module>provider-service</module>
+        <module>download-service</module>
     </modules>
     <packaging>pom</packaging>
 
