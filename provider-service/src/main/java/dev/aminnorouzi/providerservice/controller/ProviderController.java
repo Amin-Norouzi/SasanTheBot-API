@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -21,7 +22,7 @@ public class ProviderController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ProviderResponse createProvider(@RequestBody ProviderRequest request) {
+    public ProviderResponse createProvider(@Valid @RequestBody ProviderRequest request) {
         Provider provider = providerService.create(request);
         return providerMapper.mapFromProvider(provider);
     }
@@ -50,7 +51,7 @@ public class ProviderController {
 
     @GetMapping("/available")
     public List<ProviderResponse> getAvailableProviders() {
-        return providerService.getAvailable()
+        return providerService.getAllAvailable()
                 .stream()
                 .map(providerMapper::mapFromProvider)
                 .toList();

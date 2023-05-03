@@ -24,6 +24,10 @@ public class ProviderRequest {
 
     @NotNull
     @NotBlank
+    private String query;
+
+    @NotNull
+    @NotBlank
     private String phrase;
 
     @NotNull

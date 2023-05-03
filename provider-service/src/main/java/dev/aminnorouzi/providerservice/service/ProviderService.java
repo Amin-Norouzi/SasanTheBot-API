@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 
 @Slf4j
@@ -25,6 +26,7 @@ public class ProviderService {
         Provider provider = Provider.builder()
                 .title(request.getTitle())
                 .url(request.getUrl())
+                .query(request.getQuery())
                 .phrase(request.getPhrase())
                 .isBanned(request.getIsBanned())
                 .isAvailable(request.getIsAvailable())
@@ -60,8 +62,10 @@ public class ProviderService {
         return found.getContent();
     }
 
-    public List<Provider> getAvailable() {
+    public List<Provider> getAllAvailable() {
         List<Provider> found = providerRepository.findByIsAvailable(true);
+
+        Collections.shuffle(found);
 
         log.info("Found available providers: {}", found);
         return found;

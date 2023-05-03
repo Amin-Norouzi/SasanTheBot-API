@@ -12,6 +12,7 @@ public class ProviderResponse {
     private Integer id;
     private String title;
     private String url;
+    private String query;
     private String phrase;
     private Boolean isBanned;
     private Boolean isAvailable;
