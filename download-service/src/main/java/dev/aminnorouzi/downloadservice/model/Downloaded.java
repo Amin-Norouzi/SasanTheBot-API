@@ -1,16 +1,13 @@
 package dev.aminnorouzi.downloadservice.model;
 
 import lombok.*;
-import org.hibernate.validator.constraints.URL;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 @Setter
@@ -19,9 +16,9 @@ import java.util.List;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "download")
+@Table(name = "downloaded")
 @EntityListeners(AuditingEntityListener.class)
-public class Download {
+public class Downloaded {
 
     @Id
     @Column(name = "id", nullable = false)
@@ -29,28 +26,10 @@ public class Download {
     private Long id;
 
     @NotNull
-    @Column(unique = true)
-    private Long movieId;
+    private Long downloadId;
 
     @NotNull
-    private Long providerId;
-
-    @URL
-    @NotNull
-    @NotBlank
-    private String url;
-
-    @NotNull
-    @Enumerated(EnumType.STRING)
-    private Type type;
-
-    @NotNull
-    @ToString.Exclude
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "downloadId")
-    private List<Link> links;
-
-    @Transient
-    private Downloaded downloaded;
+    private Long userId;
 
     @CreatedDate
     @Column(updatable = false)

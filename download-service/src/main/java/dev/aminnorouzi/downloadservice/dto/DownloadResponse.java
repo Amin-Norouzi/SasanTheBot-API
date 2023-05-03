@@ -19,4 +19,5 @@ public class DownloadResponse {
     private String url;
     private Type type;
     private List<Link> links;
+    private DownloadedResponse downloaded;
 }
