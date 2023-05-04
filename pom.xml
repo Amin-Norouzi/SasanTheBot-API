@@ -24,6 +24,7 @@
         <module>config-server</module>
         <module>provider-service</module>
         <module>download-service</module>
+        <module>scraper-service</module>
     </modules>
     <packaging>pom</packaging>
 
