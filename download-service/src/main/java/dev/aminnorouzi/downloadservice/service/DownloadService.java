@@ -1,14 +1,12 @@
 package dev.aminnorouzi.downloadservice.service;
 
 import dev.aminnorouzi.downloadservice.client.MovieClient;
+import dev.aminnorouzi.downloadservice.client.ProviderClient;
 import dev.aminnorouzi.downloadservice.client.ScraperClient;
 import dev.aminnorouzi.downloadservice.dto.DownloadRequest;
 import dev.aminnorouzi.downloadservice.dto.DownloadedRequest;
 import dev.aminnorouzi.downloadservice.exception.DownloadNotFoundException;
-import dev.aminnorouzi.downloadservice.model.Download;
-import dev.aminnorouzi.downloadservice.model.Downloaded;
-import dev.aminnorouzi.downloadservice.model.Movie;
-import dev.aminnorouzi.downloadservice.model.Scraped;
+import dev.aminnorouzi.downloadservice.model.*;
 import dev.aminnorouzi.downloadservice.repository.DownloadRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +19,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 @Slf4j
 @Service
@@ -31,6 +30,7 @@ public class DownloadService {
     private final ScraperClient scraperClient;
     private final MovieClient movieClient;
     private final DownloadedService downloadedService;
+    private final ProviderClient providerClient;
 
     public Download download(DownloadRequest request) {
         Download download;
@@ -60,12 +60,19 @@ public class DownloadService {
     }
 
     private Scraped scrape(DownloadRequest request) {
-        Scraped data = scraperClient.scrape(request.getImdbId());
-        if (!data.getSucceed()) {
-            throw new IllegalStateException("Download links were not found!");
+        // what if providers list was empty
+        List<Provider> providers = providerClient.getAvailable();
+
+        Optional<Scraped> optional = providers.stream().parallel()
+                .map(p -> scraperClient.scrape(p.getId(), request.getImdbId()))
+                .filter(s -> s.getSucceed().equals(true))
+                .findFirst();
+
+        if (optional.isPresent()) {
+           return optional.get();
         }
 
-        return data;
+        throw new IllegalStateException("Download links were not found!");
     }
 
     public Download save(DownloadRequest request, Scraped data) {
