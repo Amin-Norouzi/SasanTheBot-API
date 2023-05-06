@@ -54,13 +54,4 @@ public class Film2MediaScraper extends Scraper {
 
         return links;
     }
-
-    @Override
-    public Document connect(String url) {
-        try {
-            return Jsoup.connect(url).get();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
 }

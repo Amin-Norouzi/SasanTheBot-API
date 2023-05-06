@@ -69,15 +69,6 @@ public class MyHastidlScraper extends Scraper {
         return links;
     }
 
-    @Override
-    public Document connect(String url) {
-        try {
-            return Jsoup.connect(url).get();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     public static void main(String[] args) {
         Scraper s = new MyHastidlScraper();
         String url = s.find("");
