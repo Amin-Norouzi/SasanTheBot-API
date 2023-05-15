@@ -28,8 +28,9 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public UserResponse getUserById(@PathVariable Long id) {
-        User user = userService.getById(id);
+    public UserResponse getUserById(@PathVariable Long id,
+                                    @RequestParam(defaultValue = "id", required = false) String with) {
+        User user = userService.get(id, with);
         return userMapper.mapFromUser(user);
     }
 

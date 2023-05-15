@@ -54,8 +54,24 @@ public class UserService {
         }
     }
 
+    public User get(Long id, String with) {
+        if (with.equals("id")) {
+            return getById(id);
+        }
+
+        return getByTelegramId(id);
+    }
+
     public User getById(Long id) {
         User found = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("User: %s not found!".formatted(id)));
+
+        log.info("Found a user: {}", found);
+        return found;
+    }
+
+    public User getByTelegramId(Long id) {
+        User found = userRepository.findByTelegramId(id)
                 .orElseThrow(() -> new UserNotFoundException("User: %s not found!".formatted(id)));
 
         log.info("Found a user: {}", found);
