@@ -42,7 +42,7 @@ public class SearchService {
     private List<Search> findByImdbId(String query) {
         List<Search> response;
         String imdbId = stringUtil.extractImdbId(query);
-        Search.SearchResponse found = movieClient.find(imdbId);
+        Search.Response found = movieClient.find(imdbId);
 
         if (!found.getMovies().isEmpty()) {
             response = found.getMovies();

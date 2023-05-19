@@ -1,10 +1,14 @@
 package dev.aminnorouzi.movieservice.controller;
 
-import dev.aminnorouzi.movieservice.dto.*;
+import dev.aminnorouzi.movieservice.dto.MetadataRequest;
+import dev.aminnorouzi.movieservice.dto.MetadataResponse;
+import dev.aminnorouzi.movieservice.dto.MovieRequest;
+import dev.aminnorouzi.movieservice.dto.MovieResponse;
 import dev.aminnorouzi.movieservice.mapper.MetadataMapper;
 import dev.aminnorouzi.movieservice.mapper.MovieMapper;
 import dev.aminnorouzi.movieservice.model.Metadata;
 import dev.aminnorouzi.movieservice.model.Movie;
+import dev.aminnorouzi.movieservice.model.Search;
 import dev.aminnorouzi.movieservice.service.MetadataService;
 import dev.aminnorouzi.movieservice.service.MovieService;
 import lombok.RequiredArgsConstructor;
@@ -61,7 +65,7 @@ public class MovieController {
 
     // TODO
     @GetMapping("/search/{query}")
-    public List<TmdbMovie> searchMovies(@PathVariable String query) {
+    public List<Search> searchMovies(@PathVariable String query) {
         return movieService.search(query);
     }
 

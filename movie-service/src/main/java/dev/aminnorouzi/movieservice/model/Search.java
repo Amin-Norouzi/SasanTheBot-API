@@ -50,7 +50,7 @@ public class Search {
     @AllArgsConstructor
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class SearchResponse {
+    public static class Response {
 
         @JsonProperty("results")
         private List<Search> results;

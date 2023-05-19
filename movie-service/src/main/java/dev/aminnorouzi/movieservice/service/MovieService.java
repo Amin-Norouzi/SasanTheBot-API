@@ -2,11 +2,8 @@ package dev.aminnorouzi.movieservice.service;
 
 import dev.aminnorouzi.movieservice.client.MovieClient;
 import dev.aminnorouzi.movieservice.dto.MovieRequest;
-import dev.aminnorouzi.movieservice.dto.TmdbMovie;
 import dev.aminnorouzi.movieservice.exception.MovieNotFoundException;
-import dev.aminnorouzi.movieservice.model.Metadata;
-import dev.aminnorouzi.movieservice.model.Movie;
-import dev.aminnorouzi.movieservice.model.Type;
+import dev.aminnorouzi.movieservice.model.*;
 import dev.aminnorouzi.movieservice.repository.MovieRepository;
 import dev.aminnorouzi.movieservice.util.BeanUtil;
 import dev.aminnorouzi.movieservice.util.StringUtil;
@@ -136,7 +133,7 @@ public class MovieService {
         return movieRepository.existsById(id);
     }
 
-    public List<TmdbMovie> search(String query) {
+    public List<Search> search(String query) {
         return searchService.search(query);
     }
 }
