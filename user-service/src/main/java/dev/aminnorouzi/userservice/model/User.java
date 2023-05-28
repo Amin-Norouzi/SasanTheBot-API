@@ -1,5 +1,6 @@
 package dev.aminnorouzi.userservice.model;
 
+import dev.aminnorouzi.userservice.model.movie.Movie;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -10,6 +11,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -47,6 +49,10 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     private Status status;
+
+    @Transient
+    @ToString.Exclude
+    private List<Movie> movies;
 
     @CreatedDate
     @Column(updatable = false)

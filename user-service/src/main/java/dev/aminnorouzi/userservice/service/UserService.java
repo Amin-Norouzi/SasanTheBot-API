@@ -1,10 +1,12 @@
 package dev.aminnorouzi.userservice.service;
 
+import dev.aminnorouzi.userservice.client.MovieClient;
 import dev.aminnorouzi.userservice.dto.UserRequest;
 import dev.aminnorouzi.userservice.exception.IllegalUserRequestException;
 import dev.aminnorouzi.userservice.exception.UserNotFoundException;
 import dev.aminnorouzi.userservice.model.Status;
 import dev.aminnorouzi.userservice.model.User;
+import dev.aminnorouzi.userservice.model.movie.Movie;
 import dev.aminnorouzi.userservice.repository.UserRepository;
 import dev.aminnorouzi.userservice.util.PasswordUtil;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +28,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final Clock clock;
     private final PasswordUtil passwordUtil;
+    private final MovieClient movieClient;
 
     public User create(UserRequest request) {
         exists(request.getEmail());
@@ -60,6 +63,15 @@ public class UserService {
         }
 
         return getByTelegramId(id);
+    }
+
+    public User getWithDetails(Long id) {
+        User user = getById(id);
+
+        List<Movie> movies = movieClient.getAllByUserId(id);
+        user.setMovies(movies);
+
+        return user;
     }
 
     public User getById(Long id) {

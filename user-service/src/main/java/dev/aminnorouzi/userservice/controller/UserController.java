@@ -34,6 +34,12 @@ public class UserController {
         return userMapper.mapFromUser(user);
     }
 
+    @GetMapping("/{id}/details")
+    public UserResponse getUserByIdWithDetails(@PathVariable Long id) {
+        User user = userService.getWithDetails(id);
+        return userMapper.mapFromUser(user);
+    }
+
     @GetMapping
     public UserResponse.Pageable getAllUsers(@RequestParam(defaultValue = "0") Integer page,
                                              @RequestParam(defaultValue = "5") Integer size,

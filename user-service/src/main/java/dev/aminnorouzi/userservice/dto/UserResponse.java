@@ -1,11 +1,11 @@
 package dev.aminnorouzi.userservice.dto;
 
 import dev.aminnorouzi.userservice.model.Status;
+import dev.aminnorouzi.userservice.model.movie.Movie;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -19,8 +19,7 @@ public class UserResponse {
     private String fullName;
     private String email;
     private Status status;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    private List<Movie> movies;
 
     @Data
     @NoArgsConstructor
