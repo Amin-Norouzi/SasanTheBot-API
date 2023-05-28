@@ -22,6 +22,8 @@ import java.time.LocalDateTime;
 @EntityListeners(AuditingEntityListener.class)
 public class Link {
 
+    // TODO implement DTO for link entity
+
     @Id
     @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,7 +37,6 @@ public class Link {
     @NotBlank
     private String url;
 
-    @URL
     @NotNull
     @NotBlank
     private String quality;

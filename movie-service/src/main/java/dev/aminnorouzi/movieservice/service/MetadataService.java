@@ -22,9 +22,9 @@ public class MetadataService {
     private final UserClient userClient;
 
     public Metadata add(MetadataRequest request) {
-        if (userClient.verify(request.getUserId())) {
-            throw new InvalidMovieUserException("User: %s was not verified!".formatted(request.getUserId()));
-        }
+//        if (userClient.verify(request.getUserId())) {
+//            throw new InvalidMovieUserException("User: %s was not verified!".formatted(request.getUserId()));
+//        }
 
         Metadata metadata = Metadata.builder()
                 .movieId(request.getMovieId())

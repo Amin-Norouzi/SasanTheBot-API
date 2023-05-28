@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
+import java.util.Map;
 
 @Configuration
 @RequiredArgsConstructor
@@ -18,14 +19,22 @@ public class ScraperConfig {
     private final AvamovieScraper avamovieScraper;
     private final FilmbanScraper filmbanScraper;
 
+//    @Bean
+//    public List<Scraper> scrapers(ProviderClient client) {
+//        Provider p1 = client.get(1L);
+//        avamovieScraper.setProvider(p1);
+//
+//        Provider p2 = client.get(2L);
+//        filmbanScraper.setProvider(p2);
+//
+//        return List.of(avamovieScraper, filmbanScraper);
+//    }
+
     @Bean
-    public List<Scraper> scrapers(ProviderClient client) {
+    public Map<Long, Provider> providers(ProviderClient client) {
         Provider p1 = client.get(1L);
-        avamovieScraper.setProvider(p1);
-
         Provider p2 = client.get(2L);
-        filmbanScraper.setProvider(p2);
 
-        return List.of(avamovieScraper, filmbanScraper);
+        return Map.of(1L, p1, 2L, p2);
     }
 }

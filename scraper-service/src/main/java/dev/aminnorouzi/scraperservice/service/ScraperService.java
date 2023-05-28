@@ -6,6 +6,7 @@ import dev.aminnorouzi.scraperservice.core.impl.AvamovieScraper;
 import dev.aminnorouzi.scraperservice.core.impl.FilmbanScraper;
 import dev.aminnorouzi.scraperservice.exception.ScraperNotFoundException;
 import dev.aminnorouzi.scraperservice.model.Link;
+import dev.aminnorouzi.scraperservice.model.Provider;
 import dev.aminnorouzi.scraperservice.model.Scraped;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 @Slf4j
@@ -21,16 +23,27 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class ScraperService {
 
-    // write download function with parallel requests to scraper service
-
-    private final List<Scraper> scrapers;
+//    private final List<Scraper> scrapers;
     private final ProviderClient providerClient;
 
+    private final Map<Long, Provider> providers;
+    private final AvamovieScraper avamovieScraper;
+    private final FilmbanScraper filmbanScraper;
+
     public Scraped scrape(Long providerId, String imdbId) {
-        Scraper scraper = scrapers.stream()
-                .filter(s -> Long.valueOf(s.getProvider().getId()).equals(providerId))
-                .findFirst()
-                .get();
+//        Scraper scraper = scrapers.stream()
+//                .filter(s -> Long.valueOf(s.getProvider().getId()).equals(providerId))
+//                .findFirst()
+//                .get();
+
+        Scraper scraper;
+        if (providerId == 1L) {
+            scraper = avamovieScraper;
+            scraper.setProvider(providers.get(providerId));
+        } else {
+            scraper = filmbanScraper;
+            scraper.setProvider(providers.get(providerId));
+        }
 
         Scraped scraped = new Scraped();
         scraped.setProviderId(providerId);

@@ -41,28 +41,28 @@ public class ProviderServiceApplication {
                     .isAvailable(true)
                     .build();
 
-            Provider film2media = Provider.builder()
-                    .title("film2media")
-                    .url("https://www.f2m.kim/")
-                    .query("?controller=search-movie&s=")
-                    .phrase("فیلم 2 مدیا | دانلود فیلم و سریال با زیرنویس فارسی چسبیده")
-                    .isBanned(false)
-                    .isAvailable(true)
-                    .build();
-
-            Provider myhastidl = Provider.builder()
-                    .title("myhastidl")
-                    .url("http://myhastidl1.cam/")
-                    .query("?s=")
-                    .phrase("هستی دی ال: دانلود رایگان فیلم و سریال با لینک مستقیم")
-                    .isBanned(false)
-                    .isAvailable(true)
-                    .build();
+//            Provider film2media = Provider.builder()
+//                    .title("film2media")
+//                    .url("https://www.f2m.kim/")
+//                    .query("?controller=search-movie&s=")
+//                    .phrase("فیلم 2 مدیا | دانلود فیلم و سریال با زیرنویس فارسی چسبیده")
+//                    .isBanned(false)
+//                    .isAvailable(true)
+//                    .build();
+//
+//            Provider myhastidl = Provider.builder()
+//                    .title("myhastidl")
+//                    .url("http://myhastidl1.cam/")
+//                    .query("?s=")
+//                    .phrase("هستی دی ال: دانلود رایگان فیلم و سریال با لینک مستقیم")
+//                    .isBanned(false)
+//                    .isAvailable(true)
+//                    .build();
 
             repository.save(avamovie);
             repository.save(filmban);
-            repository.save(film2media);
-            repository.save(myhastidl);
+//            repository.save(film2media);
+//            repository.save(myhastidl);
         };
     }
 }

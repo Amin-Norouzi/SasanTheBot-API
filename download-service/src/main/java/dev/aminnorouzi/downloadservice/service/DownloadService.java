@@ -8,6 +8,7 @@ import dev.aminnorouzi.downloadservice.dto.DownloadedRequest;
 import dev.aminnorouzi.downloadservice.exception.DownloadNotFoundException;
 import dev.aminnorouzi.downloadservice.model.*;
 import dev.aminnorouzi.downloadservice.repository.DownloadRepository;
+import dev.aminnorouzi.downloadservice.repository.LinkRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -31,6 +32,7 @@ public class DownloadService {
     private final MovieClient movieClient;
     private final DownloadedService downloadedService;
     private final ProviderClient providerClient;
+    private final LinkRepository linkRepository;
 
     public Download download(DownloadRequest request) {
         Download download;
@@ -38,14 +40,13 @@ public class DownloadService {
         Optional<Download> optional = downloadRepository.findByMovieId(request.getMovieId());
         if (optional.isPresent()) {
             download = optional.get();
-
-            downloadedService.verify(request, download);
         } else {
             Scraped data = scrape(request);
             download = save(request, data);
-        }
 
-        add(request, download);
+            downloadedService.verify(request, download);
+            add(request, download);
+        }
 
         log.info("Downloaded a movie: {}", download);
         return download;
@@ -87,6 +88,11 @@ public class DownloadService {
                 .build();
 
         Download saved = downloadRepository.save(download);
+
+        data.getLinks().forEach(link -> {
+            link.setDownloadId(saved.getId());
+            linkRepository.save(link);
+        });
 
         log.info("Saved new download: {}", saved);
         return saved;
