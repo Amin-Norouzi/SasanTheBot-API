@@ -6,9 +6,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
 
-@FeignClient(name = "provider-service", url = "http://localhost:9093")
+@FeignClient(name = "provider-service")
 public interface ProviderClient {
 
-    @GetMapping("/api/v1/providers/available")
+    @GetMapping("${provider.client.get-available}")
     List<Provider> getAvailable();
 }
